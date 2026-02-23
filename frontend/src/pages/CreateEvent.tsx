@@ -5,7 +5,7 @@ import { Calendar, Clock, Users, MapPin, Trophy, RotateCcw, CheckCircle } from '
 import { useTelegram } from '../hooks/useTelegram';
 
 const CreateEvent: React.FC = () => {
-  const { user, showAlert, showMainButton, hideMainButton } = useTelegram();
+  const { showAlert, showMainButton, hideMainButton } = useTelegram();
   const navigate = useNavigate();
   const [locations, setLocations] = useState<any[]>([]);
   const [formData, setFormData] = useState({
@@ -21,10 +21,10 @@ const CreateEvent: React.FC = () => {
   });
 
   useEffect(() => {
-    getLocations().then((res) => setLocations(res.data));
     
-    // œÓÍ‡Á˚‚‡ÂÏ ÍÌÓÔÍÛ Telegram ‰Îˇ ÒÓÁ‰‡ÌËˇ
-    showMainButton('—ÓÁ‰‡Ú¸', () => {
+    getLocations().then((res) => setLocations(res.data));
+    // –ü–æ–∫–∞–∑—ã–≤–∞–µ–º –∫–Ω–æ–ø–∫—É Telegram –¥–ª—è —Å–æ–∑–¥–∞–Ω–∏—è
+    showMainButton('–°–æ–∑–¥–∞—Ç—å', () => {
       const form = document.querySelector('form');
       if (form) {
         form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
@@ -34,7 +34,6 @@ const CreateEvent: React.FC = () => {
     return () => {
       hideMainButton();
     };
-    getLocations().then((res) => setLocations(res.data));
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,7 +44,7 @@ const CreateEvent: React.FC = () => {
         date: new Date(formData.date).toISOString(),
         location_id: parseInt(formData.location_id),
       });
-      showAlert('ÃÂÓÔËˇÚËÂ ÛÒÔÂ¯ÌÓ ÒÓÁ‰‡ÌÓ!');
+      showAlert('–ú–µ—Ä–æ–ø—Ä–∏—è—Ç–∏–µ —É—Å–ø–µ—à–Ω–æ —Å–æ–∑–¥–∞–Ω–æ!');
       navigate('/');
     } catch (err) {
       console.error(err);
@@ -152,7 +151,7 @@ const CreateEvent: React.FC = () => {
             >
               <option value="on loss">–ü—Ä–∏ –ø—Ä–æ–∏–≥—Ä—ã—à–µ</option>
               <option value="every 2 games">–ö–∞–∂–¥—ã–µ 2 –∏–≥—Ä—ã</option>
-              <option value="on draw">–ü—Ä–∏ –Ω–∏—á—å–µ</option>
+              <option value="on draw">–ü—Ä–∏ –Ω–∏—á—å–µ–π</option>
             </select>
           </div>
         </div>

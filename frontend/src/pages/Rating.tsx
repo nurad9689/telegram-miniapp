@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getParticipants } from '../api';
-import { Trophy, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 const Rating: React.FC = () => {
   const [players, setPlayers] = useState<any[]>([]);
