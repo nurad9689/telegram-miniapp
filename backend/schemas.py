@@ -23,8 +23,10 @@ class Location(LocationBase):
         from_attributes = True
 
 class ParticipantBase(BaseModel):
+    telegram_id: int
     name: str
     fullname: Optional[str] = None
+    username: Optional[str] = None
     rate: float = 0.0
     positions: Optional[str] = None
     goals: int = 0
@@ -38,6 +40,23 @@ class ParticipantCreate(ParticipantBase):
 
 class Participant(ParticipantBase):
     id: int
+
+    class Config:
+        from_attributes = True
+
+class TelegramUserCreate(BaseModel):
+    telegram_id: int
+    first_name: str
+    last_name: Optional[str] = None
+    username: Optional[str] = None
+
+class TelegramUserResponse(BaseModel):
+    id: int
+    telegram_id: int
+    name: str
+    fullname: Optional[str] = None
+    username: Optional[str] = None
+    rate: float = 0.0
 
     class Config:
         from_attributes = True

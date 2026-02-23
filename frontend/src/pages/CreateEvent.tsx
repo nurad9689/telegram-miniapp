@@ -5,7 +5,7 @@ import { Calendar, Clock, Users, MapPin, Trophy, RotateCcw, CheckCircle } from '
 import { useTelegram } from '../hooks/useTelegram';
 
 const CreateEvent: React.FC = () => {
-  const { showAlert, showMainButton, hideMainButton } = useTelegram();
+  const { showAlert, showMainButton, hideMainButton, currentUser } = useTelegram();
   const navigate = useNavigate();
   const [locations, setLocations] = useState<any[]>([]);
   const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ const CreateEvent: React.FC = () => {
     game_end_condition: '7 minutes',
     rotation_rule: 'on loss',
     location_id: '',
-    creator_id: 1, // Временно хардкодим, пока нет Telegram API
+    creator_id: 0,
   });
 
   useEffect(() => {
@@ -37,12 +37,17 @@ const CreateEvent: React.FC = () => {
   }, [showMainButton, hideMainButton]);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
+    if (!currentUser) {
+      showAlert('Пожалуйста, подождите загрузки данных пользователя');
+      return;
+    }
     e.preventDefault();
     try {
       await api.post('/events/', {
         ...formData,
         date: new Date(formData.date).toISOString(),
         location_id: parseInt(formData.location_id),
+        creator_id: currentUser.id,
       });
       showAlert('Мероприятие успешно создано!');
       navigate('/');

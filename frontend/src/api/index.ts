@@ -13,3 +13,26 @@ export const joinEvent = (eventId: number, participantId: number) =>
   api.post(`/events/${eventId}/join/${participantId}`);
 export const getEventBalance = (eventId: number) => 
   api.get(`/events/${eventId}/balance`);
+
+// Telegram Auth
+export interface TelegramUser {
+  telegram_id: number;
+  first_name: string;
+  last_name?: string;
+  username?: string;
+}
+
+export interface TelegramUserResponse {
+  id: number;
+  telegram_id: number;
+  name: string;
+  fullname?: string;
+  username?: string;
+  rate: number;
+}
+
+export const registerTelegramUser = (user: TelegramUser) => 
+  api.post<TelegramUserResponse>('/auth/telegram', user);
+
+export const getCurrentUser = (telegramId: number) => 
+  api.get<TelegramUserResponse>(`/participants/me?telegram_id=${telegramId}`);

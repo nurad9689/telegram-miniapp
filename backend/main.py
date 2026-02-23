@@ -22,6 +22,46 @@ app.add_middleware(
 async def root():
     return {"message": "Welcome to Sports Events API"}
 
+# Telegram Auth
+@app.post("/auth/telegram", response_model=schemas.TelegramUserResponse)
+def auth_telegram(user_data: schemas.TelegramUserCreate, db: Session = Depends(get_db)):
+    # Проверяем, существует ли пользователь с таким telegram_id
+    participant = db.query(models.Participant).filter(
+        models.Participant.telegram_id == user_data.telegram_id
+    ).first()
+    
+    if participant:
+        # Обновляем данные пользователя, если они изменились
+        participant.name = user_data.first_name
+        participant.fullname = user_data.last_name
+        participant.username = user_data.username
+        db.commit()
+        db.refresh(participant)
+        return participant
+    else:
+        # Создаем нового пользователя
+        new_participant = models.Participant(
+            telegram_id=user_data.telegram_id,
+            name=user_data.first_name,
+            fullname=user_data.last_name,
+            username=user_data.username
+        )
+        db.add(new_participant)
+        db.commit()
+        db.refresh(new_participant)
+        return new_participant
+
+@app.get("/participants/me", response_model=schemas.TelegramUserResponse)
+def get_current_user(telegram_id: int, db: Session = Depends(get_db)):
+    participant = db.query(models.Participant).filter(
+        models.Participant.telegram_id == telegram_id
+    ).first()
+    
+    if not participant:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return participant
+
 # Алгоритм распределения по командам
 def balance_teams(participants: List[models.Participant], num_teams: int) -> List[List[models.Participant]]:
     # Сортируем игроков по рейтингу (от высокого к низкому)

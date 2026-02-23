@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import WebApp from '@twa-dev/sdk';
+import { registerTelegramUser, TelegramUserResponse } from '../api';
 
 export interface TelegramUser {
   id: number;
@@ -12,6 +13,8 @@ export interface TelegramUser {
 export const useTelegram = () => {
   const [user, setUser] = useState<TelegramUser | null>(null);
   const [webApp, setWebApp] = useState<typeof WebApp | null>(null);
+  const [currentUser, setCurrentUser] = useState<TelegramUserResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Инициализация Telegram WebApp
@@ -20,7 +23,27 @@ export const useTelegram = () => {
 
     // Получение данных пользователя
     if (WebApp.initDataUnsafe.user) {
-      setUser(WebApp.initDataUnsafe.user as TelegramUser);
+      const telegramUser = WebApp.initDataUnsafe.user as TelegramUser;
+      setUser(telegramUser);
+      
+      // Автоматическая регистрация пользователя
+      registerTelegramUser({
+        telegram_id: telegramUser.id,
+        first_name: telegramUser.first_name,
+        last_name: telegramUser.last_name,
+        username: telegramUser.username,
+      })
+        .then((res) => {
+          setCurrentUser(res.data);
+        })
+        .catch((err) => {
+          console.error('Failed to register user:', err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
     }
 
     // Настройка темы
@@ -74,6 +97,8 @@ export const useTelegram = () => {
   return {
     user,
     webApp,
+    currentUser,
+    isLoading,
     showMainButton,
     hideMainButton,
     showAlert,

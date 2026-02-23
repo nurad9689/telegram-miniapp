@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Table, Enum
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Table, Enum, UniqueConstraint
 from sqlalchemy.orm import relationship
 from database import Base
 import enum
@@ -30,8 +30,10 @@ class Participant(Base):
     __tablename__ = "participants"
 
     id = Column(Integer, primary_key=True, index=True)
+    telegram_id = Column(Integer, unique=True, nullable=False, index=True)
     name = Column(String, nullable=False)
     fullname = Column(String)
+    username = Column(String)
     rate = Column(Float, default=0.0)
     positions = Column(String)  # Можно хранить как строку через запятую
     goals = Column(Integer, default=0)
