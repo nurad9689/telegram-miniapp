@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import WebApp from '@twa-dev/sdk';
 
 export interface TelegramUser {
@@ -39,37 +39,37 @@ export const useTelegram = () => {
     };
   }, []);
 
-  const showMainButton = (text: string, onClick: () => void) => {
+  const showMainButton = useCallback((text: string, onClick: () => void) => {
     if (webApp) {
       webApp.MainButton.setText(text);
       webApp.MainButton.onClick(onClick);
       webApp.MainButton.show();
     }
-  };
+  }, [webApp]);
 
-  const hideMainButton = () => {
+  const hideMainButton = useCallback(() => {
     if (webApp) {
       webApp.MainButton.hide();
     }
-  };
+  }, [webApp]);
 
-  const showAlert = (message: string) => {
+  const showAlert = useCallback((message: string) => {
     if (webApp) {
       webApp.showAlert(message);
     }
-  };
+  }, [webApp]);
 
-  const showConfirm = (message: string, callback: (confirmed: boolean) => void) => {
+  const showConfirm = useCallback((message: string, callback: (confirmed: boolean) => void) => {
     if (webApp) {
       webApp.showConfirm(message, callback);
     }
-  };
+  }, [webApp]);
 
-  const closeApp = () => {
+  const closeApp = useCallback(() => {
     if (webApp) {
       webApp.close();
     }
-  };
+  }, [webApp]);
 
   return {
     user,
