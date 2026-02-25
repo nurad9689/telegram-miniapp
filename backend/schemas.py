@@ -8,9 +8,16 @@ class EventStatus(str, Enum):
     ACTIVE = "active"
     FINISHED = "finished"
 
+class ParticipantPostion(str, Enum):
+    GOALKEEPER = "goalkeeper"
+    DEFENDER = "defender"
+    MIDFIELDER = "midfielder"
+    FORWARD = "forward"
+    NOPOSITION = "no_position"
+
 class LocationBase(BaseModel):
     address: str
-    rate: float = 0.0
+    rate: Optional[float] = 0.0
     description: Optional[str] = None
 
 class LocationCreate(LocationBase):
@@ -24,11 +31,11 @@ class Location(LocationBase):
 
 class ParticipantBase(BaseModel):
     telegram_id: int
-    name: str
-    fullname: Optional[str] = None
+    first_name: str
+    last_name: Optional[str] = None
     username: Optional[str] = None
-    rate: float = 0.0
-    positions: Optional[str] = None
+    rate: Optional[float] = 0.0
+    positions: ParticipantPostion = ParticipantPostion.NOPOSITION
     goals: int = 0
     passes: int = 0
     wins: int = 0
@@ -53,10 +60,10 @@ class TelegramUserCreate(BaseModel):
 class TelegramUserResponse(BaseModel):
     id: int
     telegram_id: int
-    name: str
-    fullname: Optional[str] = None
+    first_name: str
+    last_name: Optional[str] = None
     username: Optional[str] = None
-    rate: float = 0.0
+    rate: Optional[float] = 0.0
 
     class Config:
         from_attributes = True

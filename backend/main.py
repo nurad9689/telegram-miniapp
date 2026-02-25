@@ -32,8 +32,8 @@ def auth_telegram(user_data: schemas.TelegramUserCreate, db: Session = Depends(g
     
     if participant:
         # Обновляем данные пользователя, если они изменились
-        participant.name = user_data.first_name
-        participant.fullname = user_data.last_name
+        participant.first_name = user_data.first_name
+        participant.last_name = user_data.last_name
         participant.username = user_data.username
         db.commit()
         db.refresh(participant)
@@ -42,8 +42,8 @@ def auth_telegram(user_data: schemas.TelegramUserCreate, db: Session = Depends(g
         # Создаем нового пользователя
         new_participant = models.Participant(
             telegram_id=user_data.telegram_id,
-            name=user_data.first_name,
-            fullname=user_data.last_name,
+            first_name=user_data.first_name,
+            last_name=user_data.last_name,
             username=user_data.username
         )
         db.add(new_participant)

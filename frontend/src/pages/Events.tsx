@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getEvents } from '../api';
-import { Calendar, Clock, Users } from 'lucide-react';
+import { Calendar, Clock, Users, Plus } from 'lucide-react';
 
 const Events: React.FC = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
@@ -11,7 +13,16 @@ const Events: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-6">Мероприятия</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Мероприятия</h1>
+        <button
+          onClick={() => navigate('/create-event')}
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium active:scale-95 transition-transform"
+        >
+          <Plus size={18} />
+          Создать
+        </button>
+      </div>
       <div className="space-y-4">
         {events.length === 0 ? (
           <div className="text-center py-10 text-gray-500">

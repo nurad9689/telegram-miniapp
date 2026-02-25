@@ -14,6 +14,9 @@ export const joinEvent = (eventId: number, participantId: number) =>
 export const getEventBalance = (eventId: number) => 
   api.get(`/events/${eventId}/balance`);
 
+export const createLocation = (location: { address: string; rate?: number; description?: string }) =>
+  api.post('/locations/', location);
+
 // Telegram Auth
 export interface TelegramUser {
   telegram_id: number;
@@ -25,8 +28,8 @@ export interface TelegramUser {
 export interface TelegramUserResponse {
   id: number;
   telegram_id: number;
-  name: string;
-  fullname?: string;
+  first_name: string;
+  last_name?: string;
   username?: string;
   rate: number;
 }

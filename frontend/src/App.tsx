@@ -4,6 +4,7 @@ import Events from './pages/Events';
 import Locations from './pages/Locations';
 import Rating from './pages/Rating';
 import CreateEvent from './pages/CreateEvent';
+import CreateLocation from './pages/CreateLocation';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/locations" element={<Locations />} />
           <Route path="/rating" element={<Rating />} />
           <Route path="/create-event" element={<CreateEvent />} />
+          <Route path="/create-location" element={<CreateLocation />} />
         </Routes>
         <Navbar />
       </div>

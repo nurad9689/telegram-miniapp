@@ -8,6 +8,14 @@ class EventStatus(enum.Enum):
     ACTIVE = "active"
     FINISHED = "finished"
 
+class ParticipantPostion(enum.Enum):
+    GOALKEEPER = "goalkeeper"
+    DEFENDER = "defender"
+    MIDFIELDER = "midfielder"
+    FORWARD = "forward"
+    FREEDRAWER = "free_drawer"
+    NOPOSITION = "no_position"
+
 # Таблица связи для участников мероприятия
 event_participants = Table(
     'event_participants',
@@ -31,11 +39,11 @@ class Participant(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     telegram_id = Column(Integer, unique=True, nullable=False, index=True)
-    name = Column(String, nullable=False)
-    fullname = Column(String)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String)
     username = Column(String)
     rate = Column(Float, default=0.0)
-    positions = Column(String)  # Можно хранить как строку через запятую
+    positions = Column(String, default=ParticipantPostion.NOPOSITION)  # Можно хранить как строку через запятую
     goals = Column(Integer, default=0)
     passes = Column(Integer, default=0)
     wins = Column(Integer, default=0)
