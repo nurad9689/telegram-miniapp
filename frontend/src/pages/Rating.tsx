@@ -2,6 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { getParticipants } from '../api';
 import { Star } from 'lucide-react';
 
+const POSITION_LABELS: Record<string, string> = {
+  goalkeeper: 'Вратарь',
+  defender: 'Защитник',
+  midfielder: 'Полузащитник',
+  forward: 'Нападающий',
+  free_drawer: 'Свободный художник',
+  no_position: 'Без позиции',
+};
+
 const Rating: React.FC = () => {
   const [players, setPlayers] = useState<any[]>([]);
 
@@ -31,8 +40,8 @@ const Rating: React.FC = () => {
                   {index + 1}
                 </td>
                 <td className="px-4 py-4">
-                  <div className="font-semibold">{player.name}</div>
-                  <div className="text-xs text-gray-500">{player.positions}</div>
+                  <div className="font-semibold">{player.first_name} {player.last_name || ''}</div>
+                  <div className="text-xs text-gray-500">{POSITION_LABELS[player.positions] || player.positions}</div>
                 </td>
                 <td className="px-4 py-4 text-right">
                   <div className="flex items-center justify-end gap-1 text-blue-600 font-bold">

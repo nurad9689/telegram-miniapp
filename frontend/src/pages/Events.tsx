@@ -1,15 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getEvents } from '../api';
+import { getEvents, joinEvent } from '../api';
 import { Calendar, Clock, Users, Plus } from 'lucide-react';
+import { useTelegram } from '../hooks/useTelegram';
 
 const Events: React.FC = () => {
   const navigate = useNavigate();
+  const { currentUser, showAlert } = useTelegram();
   const [events, setEvents] = useState<any[]>([]);
+  const [joining, setJoining] = useState<number | null>(null);
 
   useEffect(() => {
     getEvents().then((res) => setEvents(res.data)).catch(err => console.error(err));
   }, []);
+
+  const handleJoin = async (eventId: number) => {
+    if (!currentUser) {
+      showAlert('Пожалуйста, подождите загрузки данных пользователя');
+      return;
+    }
+
+    setJoining(eventId);
+    try {
+      await joinEvent(eventId, currentUser.id);
+      showAlert('Вы успешно присоединились к мероприятию!');
+      // Обновляем список мероприятий
+      getEvents().then((res) => setEvents(res.data));
+    } catch (err: any) {
+      console.error(err);
+      const errorMessage = err.response?.data?.detail || 'Ошибка при присоединении';
+      showAlert(errorMessage);
+    } finally {
+      setJoining(null);
+    }
+  };
+
+  const isJoined = (event: any) => {
+    return event.participants?.some((p: any) => p.id === currentUser?.id);
+  };
+
+  const isFull = (event: any) => {
+    return event.participants?.length >= event.max_participants;
+  };
 
   return (
     <div className="p-4">
@@ -53,8 +85,24 @@ const Events: React.FC = () => {
                   <span>{event.participants?.length || 0} / {event.max_participants} участников</span>
                 </div>
               </div>
-              <button className="w-full mt-4 bg-blue-500 text-white py-2 rounded-lg font-medium active:scale-95 transition-transform">
-                Присоединиться
+              <button
+                onClick={() => handleJoin(event.id)}
+                disabled={isJoined(event) || isFull(event) || joining === event.id}
+                className={`w-full mt-4 py-2 rounded-lg font-medium active:scale-95 transition-transform ${
+                  isJoined(event)
+                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                    : isFull(event)
+                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                    : 'bg-blue-500 text-white'
+                }`}
+              >
+                {joining === event.id
+                  ? 'Присоединение...'
+                  : isJoined(event)
+                  ? 'Вы уже участвуете'
+                  : isFull(event)
+                  ? 'Мест нет'
+                  : 'Присоединиться'}
               </button>
             </div>
           ))

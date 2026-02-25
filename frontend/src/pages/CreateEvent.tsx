@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, getLocations } from '../api';
-import { Calendar, Clock, Users, MapPin, Trophy, RotateCcw, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, Users, UserPlus, MapPin, Trophy, RotateCcw, CheckCircle } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
 
 const CreateEvent: React.FC = () => {
@@ -124,6 +124,18 @@ const CreateEvent: React.FC = () => {
               className="w-16 text-right border-none focus:ring-0 font-bold text-blue-600"
               value={formData.format_teams}
               onChange={(e) => setFormData({ ...formData, format_teams: parseInt(e.target.value) })}
+            />
+          </div>
+          <div className="flex items-center justify-between border-t pt-4">
+            <div className="flex items-center gap-2 text-gray-700">
+              <UserPlus size={18} />
+              <span>Количество игроков в команде</span>
+            </div>
+            <input
+              type="number"
+              className="w-16 text-right border-none focus:ring-0 font-bold text-blue-600"
+              value={formData.format_players_per_team}
+              onChange={(e) => setFormData({ ...formData, format_players_per_team: parseInt(e.target.value) })}
             />
           </div>
         </div>
