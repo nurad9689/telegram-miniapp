@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Table, Enum, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Table, Enum as SQLEnum, UniqueConstraint
 from sqlalchemy.orm import relationship
 from database import Base
 import enum
@@ -43,7 +43,7 @@ class Participant(Base):
     last_name = Column(String)
     username = Column(String)
     rate = Column(Float, default=0.0)
-    positions = Column(String, default=ParticipantPostion.NOPOSITION)  # Можно хранить как строку через запятую
+    positions = Column(SQLEnum(ParticipantPostion), default=ParticipantPostion.NOPOSITION)
     goals = Column(Integer, default=0)
     passes = Column(Integer, default=0)
     wins = Column(Integer, default=0)
@@ -59,7 +59,7 @@ class Event(Base):
     id = Column(Integer, primary_key=True, index=True)
     date = Column(DateTime)
     time = Column(String)
-    status = Column(Enum(EventStatus), default=EventStatus.WAITING)
+    status = Column(SQLEnum(EventStatus), default=EventStatus.WAITING)
     
     max_participants = Column(Integer, default=10)
     format_teams = Column(Integer, default=2)

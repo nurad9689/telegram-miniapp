@@ -13,6 +13,7 @@ class ParticipantPostion(str, Enum):
     DEFENDER = "defender"
     MIDFIELDER = "midfielder"
     FORWARD = "forward"
+    FREEDRAWER = "free_drawer"
     NOPOSITION = "no_position"
 
 class LocationBase(BaseModel):
@@ -22,6 +23,11 @@ class LocationBase(BaseModel):
 
 class LocationCreate(LocationBase):
     pass
+
+class LocationUpdate(BaseModel):
+    address: Optional[str] = None
+    rate: Optional[float] = None
+    description: Optional[str] = None
 
 class Location(LocationBase):
     id: int
@@ -44,6 +50,18 @@ class ParticipantBase(BaseModel):
 
 class ParticipantCreate(ParticipantBase):
     pass
+
+class ParticipantUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    username: Optional[str] = None
+    rate: Optional[float] = None
+    positions: Optional[ParticipantPostion] = None
+    goals: Optional[int] = None
+    passes: Optional[int] = None
+    wins: Optional[int] = None
+    draws: Optional[int] = None
+    loses: Optional[int] = None
 
 class Participant(ParticipantBase):
     id: int
@@ -82,6 +100,17 @@ class EventBase(BaseModel):
 
 class EventCreate(EventBase):
     pass
+
+class EventUpdate(BaseModel):
+    date: Optional[datetime] = None
+    time: Optional[str] = None
+    status: Optional[EventStatus] = None
+    max_participants: Optional[int] = None
+    format_teams: Optional[int] = None
+    format_players_per_team: Optional[int] = None
+    game_end_condition: Optional[str] = None
+    rotation_rule: Optional[str] = None
+    location_id: Optional[int] = None
 
 class Event(EventBase):
     id: int
