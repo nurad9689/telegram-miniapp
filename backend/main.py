@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List, Dict
 import os
+from dotenv import load_dotenv
 
 import models, schemas, database
 from database import engine, get_db
@@ -10,6 +11,8 @@ from telegram_auth import validate_and_extract_user
 from exceptions import DatabaseError, NotFoundError, ConflictError, ValidationError
 from logger import logger
 
+# Загружаем переменные окружения
+load_dotenv()
 
 app = FastAPI(title="Telegram MiniApp API")
 
@@ -86,23 +89,6 @@ def auth_telegram(auth_data: Dict[str, str], db: Session = Depends(get_db)):
         logger.error(f"Authentication error: {str(e)}", exc_info=True)
         raise DatabaseError(f"Authentication error: {str(e)}")
 
-@app.get("/participants/me", response_model=schemas.TelegramUserResponse)
-def get_current_user(telegram_id: int, db: Session = Depends(get_db)):
-    try:
-        participant = db.query(models.Participant).filter(
-            models.Participant.telegram_id == telegram_id
-        ).first()
-        
-        if not participant:
-            logger.warning(f"User not found: telegram_id={telegram_id}")
-            raise NotFoundError("User")
-        
-        return participant
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error fetching user: {str(e)}", exc_info=True)
-        raise DatabaseError(f"Failed to fetch user: {str(e)}")
 
 # Алгоритм распределения по командам
 def balance_teams(participants: List[models.Participant], num_teams: int) -> List[List[models.Participant]]:

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import WebApp from '@twa-dev/sdk';
-import { registerTelegramUser, TelegramUserResponse } from '../api';
+import { authTelegramUser, TelegramUserResponse } from '../api';
 
 export interface TelegramUser {
   id: number;
@@ -22,17 +22,16 @@ export const useTelegram = () => {
     setWebApp(WebApp);
 
     // Получение данных пользователя
-    if (WebApp.initDataUnsafe.user) {
-      const telegramUser = WebApp.initDataUnsafe.user as TelegramUser;
-      setUser(telegramUser);
+    if (WebApp.initData) {
+      const params = new URLSearchParams(WebApp.initData);
+      const authData = Object.fromEntries(params.entries());
       
-      // Автоматическая регистрация пользователя
-      registerTelegramUser({
-        telegram_id: telegramUser.id,
-        first_name: telegramUser.first_name,
-        last_name: telegramUser.last_name,
-        username: telegramUser.username,
-      })
+      if (WebApp.initDataUnsafe.user) {
+        setUser(WebApp.initDataUnsafe.user as TelegramUser);
+      }
+      
+      // Автоматическая регистрация пользователя с полной валидацией
+      authTelegramUser(authData)
         .then((res) => {
           setCurrentUser(res.data);
         })

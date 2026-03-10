@@ -1,5 +1,6 @@
 import hashlib
 import hmac
+import time
 from typing import Dict, Optional
 from fastapi import HTTPException, status
 
@@ -18,16 +19,31 @@ def verify_telegram_auth(auth_data: Dict[str, str], bot_token: str) -> bool:
     1. Собрать все параметры кроме hash
     2. Отсортировать по алфавиту
     3. Сформировать строку в формате key=value
-    4. Создать HMAC-SHA256 с bot_token
+    4. Создать HMAC-SHA256 с bot_token (используя WebAppData как ключ)
     5. Сравнить с полученным hash
     """
     
     # Получаем hash из данных
     received_hash = auth_data.get('hash')
-    if not received_hash:
+    auth_date = auth_data.get('auth_date')
+    
+    if not received_hash or not auth_date:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Missing hash in auth data"
+            detail="Missing hash or auth_date in auth data"
+        )
+    
+    # Проверка актуальности данных (не старше 24 часов)
+    try:
+        if time.time() - int(auth_date) > 86400:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Auth data is outdated"
+            )
+    except (ValueError, TypeError):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid auth_date format"
         )
     
     # Создаем словарь данных без hash
@@ -39,10 +55,14 @@ def verify_telegram_auth(auth_data: Dict[str, str], bot_token: str) -> bool:
     # Формируем строку для проверки
     data_check_string = '\n'.join([f"{k}={v}" for k, v in data_check_sorted])
     
-    # Создаем секретный ключ из bot_token
-    secret_key = hashlib.sha256(bot_token.encode()).digest()
+    # 1. Сначала получаем секретный ключ (HMAC-SHA256 от bot_token с ключом "WebAppData")
+    secret_key = hmac.new(
+        b"WebAppData",
+        bot_token.encode(),
+        hashlib.sha256
+    ).digest()
     
-    # Вычисляем HMAC-SHA256
+    # 2. Затем вычисляем финальный HMAC-SHA256 от data_check_string
     hash_calc = hmac.new(
         secret_key,
         data_check_string.encode(),
