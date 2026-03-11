@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getLocations } from '../api';
-import { MapPin, Star, Info, Plus } from 'lucide-react';
+import { getLocations, deleteLocation } from '../api';
+import { MapPin, Star, Info, Plus, Trash } from 'lucide-react';
 
 const Locations: React.FC = () => {
   const navigate = useNavigate();
   const [locations, setLocations] = useState<any[]>([]);
 
   useEffect(() => {
-    getLocations().then((res) => setLocations(res.data)).catch(err => console.error(err));
+    getLocations()
+      .then((res) => setLocations(res.data))
+      .catch(err => console.error(err));
   }, []);
 
   return (
@@ -41,6 +43,9 @@ const Locations: React.FC = () => {
                   <Star size={16} fill="currentColor" />
                   {loc.rate.toFixed(1)}
                 </div>
+                <button onClick={() => deleteLocation(loc.id)} className="text-red-500 hover:text-red-700">
+                  <Trash size={18}/>
+                </button>
               </div>
               {loc.description && (
                 <div className="mt-2 p-3 bg-blue-50 rounded-lg text-sm text-blue-700 flex gap-2">

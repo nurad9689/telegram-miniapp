@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getEvents, joinEvent } from '../api';
-import { Calendar, Clock, Users, Plus } from 'lucide-react';
+import { getEvents, deleteEvent, joinEvent } from '../api';
+import { Calendar, Clock, Users, Plus, Trash } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
 
 const Events: React.FC = () => {
@@ -11,7 +11,9 @@ const Events: React.FC = () => {
   const [joining, setJoining] = useState<number | null>(null);
 
   useEffect(() => {
-    getEvents().then((res) => setEvents(res.data)).catch(err => console.error(err));
+    getEvents()
+    .then((res) => setEvents(res.data))
+    .catch(err => console.error(err));
   }, []);
 
   const handleJoin = async (eventId: number) => {
@@ -70,6 +72,9 @@ const Events: React.FC = () => {
                 }`}>
                   {event.status}
                 </span>
+                <button onClick={() => deleteEvent(event.id)} className="text-red-500 hover:text-red-700">
+                  <Trash size={18}/>
+                </button>
               </div>
               <div className="space-y-2 text-sm text-gray-600">
                 <div className="flex items-center gap-2">

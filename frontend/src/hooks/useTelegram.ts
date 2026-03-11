@@ -48,18 +48,18 @@ export const useTelegram = () => {
     // Настройка темы
     WebApp.expand();
     
-    // Настройка кнопки "Назад"
-    WebApp.BackButton.show();
-    WebApp.BackButton.onClick(() => {
+    // Настройка кнопки "Закрыть" (скрываем кнопку "Назад")
+    WebApp.BackButton.hide();
+    
+    const handleBack = () => {
       window.history.back();
-    });
+    };
+
+    WebApp.BackButton.onClick(handleBack);
 
     return () => {
-      WebApp.BackButton.offClick(() => {
-        window.history.back();
-      });
-    };
-  }, []);
+      WebApp.BackButton.offClick(handleBack);
+    };  }, []);
 
   const showMainButton = useCallback((text: string, onClick: () => void) => {
     if (webApp) {
