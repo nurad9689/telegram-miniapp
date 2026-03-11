@@ -3,12 +3,12 @@ from sqlalchemy.orm import relationship
 from database import Base
 import enum
 
-class EventStatus(enum.Enum):
+class EventStatus(str, enum.Enum):
     WAITING = "waiting"
     ACTIVE = "active"
     FINISHED = "finished"
 
-class ParticipantPostion(enum.Enum):
+class ParticipantPostion(str, enum.Enum):
     GOALKEEPER = "goalkeeper"
     DEFENDER = "defender"
     MIDFIELDER = "midfielder"

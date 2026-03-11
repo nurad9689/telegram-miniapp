@@ -48,9 +48,6 @@ const Locations: React.FC = () => {
                   <p>{loc.description}</p>
                 </div>
               )}
-              <button className="w-full mt-4 border border-blue-500 text-blue-500 py-2 rounded-lg font-medium active:bg-blue-50 transition-colors">
-                Посмотреть на карте
-              </button>
             </div>
           ))
         )}
