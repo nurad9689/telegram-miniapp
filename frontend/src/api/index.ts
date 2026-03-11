@@ -11,8 +11,8 @@ export const updateEvent = (eventId: number) => api.put(`/events/${eventId}`);
 export const deleteEvent = (eventId: number) => api.delete(`/events/${eventId}`);
 
 export const getLocations = () => api.get('/locations/');
-export const updateLocation = (locationId: number) => api.put(`/events/${locationId}`);
-export const deleteLocation = (locationId: number) => api.delete(`/events/${locationId}`);
+export const updateLocation = (locationId: number) => api.put(`/locations/${locationId}`);
+export const deleteLocation = (locationId: number) => api.delete(`/locations/${locationId}`);
 
 export const getParticipants = () => api.get('/participants/');
 export const joinEvent = (eventId: number, participantId: number) => 
