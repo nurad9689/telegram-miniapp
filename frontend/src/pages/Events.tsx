@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getEvents, deleteEvent, joinEvent } from '../api';
-import { Calendar, Clock, Users, Plus, Trash } from 'lucide-react';
+import { Calendar, Clock, Users, Plus, Trash, MapPin } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
 
 const Events: React.FC = () => {
@@ -78,6 +78,10 @@ const Events: React.FC = () => {
               </div>
               <div className="space-y-2 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
+                  <MapPin size={16} />
+                  <span>{event.location}</span>
+                </div>
+                <div className="flex items-center gap-2">
                   <Calendar size={16} />
                   <span>{new Date(event.date).toLocaleDateString()}</span>
                 </div>
@@ -110,7 +114,7 @@ const Events: React.FC = () => {
                   : 'Присоединиться'}
               </button>
               <button 
-                onClick={() => navigate(`/event/${event.id}`)}
+                onClick={() => navigate(`/events/${event.id}`)}
                 className="mt-2 w-full py-2 rounded-lg font-medium active:scale-95 transition-transform bg-gray-200 text-gray-700"
               >
                 Подробнее
