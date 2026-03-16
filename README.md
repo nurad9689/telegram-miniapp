@@ -72,7 +72,7 @@ npm run build
 1. В @BotFather отправьте `/newapp`
 2. Выберите вашего бота
 3. Введите название приложения
-4. Введите URL вашего развернутого фронтенда (например: `https://your-app.vercel.app`)
+4. Введите URL вашего развернутого фронтенда (например: `https://telegram-miniapp-eosin-theta.vercel.app`)
 5. BotFather выдаст вам URL для Mini App
 
 ### Шаг 4: Тестирование

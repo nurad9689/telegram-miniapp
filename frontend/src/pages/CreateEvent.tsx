@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api, getLocations } from '../api';
+import { createEvent, getLocations } from '../api';
 import { Calendar, Clock, Users, UserPlus, MapPin, Trophy, RotateCcw, CheckCircle } from 'lucide-react';
 import { useTelegram } from '../hooks/useTelegram';
 
@@ -16,13 +16,16 @@ const CreateEvent: React.FC = () => {
     format_players_per_team: 5,
     game_end_condition: '7 minutes',
     rotation_rule: 'on loss',
+    status: '',
     location_id: '',
     creator_id: 0,
   });
 
   useEffect(() => {
     
-    getLocations().then((res) => setLocations(res.data));
+    getLocations()
+      .then(res => setLocations(res.data))
+      .catch(err => console.error(err));
     // Показываем кнопку Telegram для создания
     showMainButton('Создать', () => {
       const form = document.querySelector('form');
@@ -43,11 +46,12 @@ const CreateEvent: React.FC = () => {
     }
     e.preventDefault();
     try {
-      await api.post('/events/', {
+      await createEvent({
         ...formData,
         date: new Date(formData.date).toISOString(),
         location_id: parseInt(formData.location_id),
-        creator_id: currentUser.id,
+        status: 'waiting',
+        creator_id: currentUser.telegram_id,
       });
       showAlert('Мероприятие успешно создано!');
       navigate('/');

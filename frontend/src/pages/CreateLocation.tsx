@@ -38,7 +38,7 @@ const CreateLocation: React.FC = () => {
       navigate('/locations');
     } catch (err) {
       console.error(err);
-      alert('Ошибка при создании локации');
+      alert(`Ошибка при создании локации ${err}`);
     }
   };
 

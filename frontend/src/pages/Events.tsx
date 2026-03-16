@@ -12,8 +12,8 @@ const Events: React.FC = () => {
 
   useEffect(() => {
     getEvents()
-    .then((res) => setEvents(res.data))
-    .catch(err => console.error(err));
+      .then(res => setEvents(res.data))
+      .catch(err => console.error(err));
   }, []);
 
   const handleJoin = async (eventId: number) => {
@@ -108,6 +108,12 @@ const Events: React.FC = () => {
                   : isFull(event)
                   ? 'Мест нет'
                   : 'Присоединиться'}
+              </button>
+              <button 
+                onClick={() => navigate(`/event/${event.id}`)}
+                className="mt-2 w-full py-2 rounded-lg font-medium active:scale-95 transition-transform bg-gray-200 text-gray-700"
+              >
+                Подробнее
               </button>
             </div>
           ))
