@@ -51,7 +51,7 @@ const CreateEvent: React.FC = () => {
         date: new Date(formData.date).toISOString(),
         location_id: parseInt(formData.location_id),
         status: 'waiting',
-        creator_id: currentUser.telegram_id,
+        creator_id: currentUser.id,
       });
       showAlert('Мероприятие успешно создано!');
       navigate('/');
