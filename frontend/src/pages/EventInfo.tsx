@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getEvent } from '../api'; // Импортируем getEvent вместо getEventById
-import { Calendar, Clock, Users, MapPin } from 'lucide-react';
+import { Calendar, Clock, Users, MapPin, Star } from 'lucide-react';
 
 // Интерфейс для события (можно вынести в отдельный файл types.ts)
 interface Event {
@@ -201,8 +201,21 @@ const EventInfo: React.FC = () => {
               <h2 className="font-semibold text-lg mb-3">Участники</h2>
               <ul className="space-y-2">
                 {event.participants.map((participant, index) => (
-                  <li key={participant.id || index} className="text-gray-600">
-                    {participant.first_name || `Участник ${index + 1}`}
+                  <li key={participant.id || index} className="flex justify-between items-center text-gray-600">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-medium text-gray-800">
+                          {participant.first_name || `Участник ${index + 1}`}
+                        </p>
+                        {participant.username && (
+                          <p className="text-xs text-gray-500">@{participant.username}</p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 bg-yellow-100 px-2 py-1 rounded-full">
+                        <Star size={14} fill="yellow" />
+                        <span className="font-bold text-yellow-700">{participant.rate || 0}</span>
+                      </div>
+                    </div>
                   </li>
                 ))}
               </ul>

@@ -44,9 +44,9 @@ const Rating: React.FC = () => {
                   <div className="text-xs text-gray-500">{POSITION_LABELS[player.positions] || player.positions}</div>
                 </td>
                 <td className="px-4 py-4 text-right">
-                  <div className="flex items-center justify-end gap-1 text-blue-600 font-bold">
-                    <Star size={14} fill="currentColor" />
-                    {player.rate.toFixed(1)}
+                  <div className="flex items-center justify-center gap-1 bg-yellow-100 px-2 py-1 rounded-full">
+                    <Star size={14} fill="yellow" />
+                    <span className="font-bold text-yellow-700">{player.rate || 0}</span>
                   </div>
                 </td>
               </tr>
